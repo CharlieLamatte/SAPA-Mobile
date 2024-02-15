@@ -1,0 +1,78 @@
+/*void _showImageSourceActionSheet(BuildContext context) {
+    Function(ImageSource) selectImageSource = (imageSource) {
+      context
+        .read<ProfileBloc>()
+        .add(OpenImagePicker(imageSource: imageSource));
+    };
+
+    if (Plateform.isIOS) {
+      showCupertinoModalPopup(
+        context: context,
+        builder: (context) => CupertinoActionSheet(
+          actions: [
+            CupertinoActionSheetAction(
+              child: Row(
+                children: const [
+                  Expanded(
+                    flex: 1,
+                    child: Icon(Icons.camera_alt_rounded),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Text("Prendre une photo"),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                selectImageSource(ImageSource.camera);
+              },
+            ),
+            CupertinoActionSheetAction(
+              child: Row(
+                children: const [
+                  Expanded(
+                    flex: 1,
+                    child: Icon(Icons.photo_library_rounded),
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: Text("Imporer depuis la galerie"),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                selectImageSource(ImageSource.gallery);
+              },
+            ),
+          ],
+        ),
+      );
+    }
+    else {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => ListView(
+          children: [
+            ListTile(
+              leading: Icon(Icons.camera_alt_rounded),
+              title: Text("Prendre une photo"),
+              onTap: () {
+                Navigator.pop(context);
+                selectImageSource(ImageSource.camera);
+              }
+            ),
+            ListTile(
+              leading: Icon(Icons.photo_library_rounded),
+              title: Text("Imporer depuis la galerie"),
+              onTap: () {
+                Navigator.pop(context);
+                selectImageSource(ImageSource.camera);
+              }
+            ),
+          ],
+        ),
+      );
+    }
+  }*/

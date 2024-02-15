@@ -1,0 +1,69 @@
+final ImagePicker _picker = ImagePicker();
+
+  //
+  _openGallery(BuildContext context) async {
+    var _picture = await _picker.pickImage(source: ImageSource.gallery);
+    this.setState(() {
+      _pdpFile = _picture as File;
+    });
+    Navigator.of(context).pop();
+  }
+
+  _openCamera(BuildContext context) async {
+    var _picture = await _picker.pickImage(source: ImageSource.camera);
+    this.setState(() {
+      _pdpFile = _picture as File;
+    });
+    Navigator.of(context).pop();
+  }
+
+  // pour choisir la galerie ou la camera
+  Future<void> _showPhotoChoiceDialog(BuildContext _context) {
+    return showDialog(
+        context: _context,
+        builder: (BuildContext _context) {
+          return AlertDialog(
+            title: Text("Ajouter une photo au profil"),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  GestureDetector(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Icon(Icons.photo_library_rounded),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Text("Imporer depuis la galerie"),
+                        ),
+                      ],
+                    ),
+                    onTap: () => _openGallery(context),
+                  ),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  GestureDetector(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Icon(Icons.camera_alt_rounded),
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: Text("Prendre une photo"),
+                        ),
+                      ],
+                    ),
+                    onTap: () => _openCamera(context),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }

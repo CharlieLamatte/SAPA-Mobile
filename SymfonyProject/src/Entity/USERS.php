@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\USERSRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table('users')]
@@ -28,6 +30,14 @@ class USERS
 
     #[ORM\Column(nullable: true)]
     private ?bool $is_deactivated = null;
+
+    #[ORM\ManyToMany(targetEntity: ARole::class, mappedBy: 'id_user')]
+    private Collection $roles;
+
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +100,33 @@ class USERS
     public function setIsDeactivated(?bool $is_deactivated): static
     {
         $this->is_deactivated = $is_deactivated;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ARole>
+     */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    public function addRole(ARole $role): static
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles->add($role);
+            $role->addIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(ARole $role): static
+    {
+        if ($this->roles->removeElement($role)) {
+            $role->removeIdUser($this);
+        }
 
         return $this;
     }

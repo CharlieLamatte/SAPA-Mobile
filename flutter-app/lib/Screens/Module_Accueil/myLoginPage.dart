@@ -149,11 +149,11 @@ class MyLoginPageState extends State<MyLoginPage> {
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               var requestResult =
-                                                  await Login.checkUser(
-                                                      context,
+                                                  await Login.loginUser(
                                                       utilisateur,
                                                       _passwordController.text);
-                                              if (requestResult == true) {
+                                              if (requestResult
+                                                  .containsKey('success')) {
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -164,8 +164,8 @@ class MyLoginPageState extends State<MyLoginPage> {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(
                                                   SnackBar(
-                                                    content:
-                                                        Text(requestResult),
+                                                    content: Text(
+                                                        'Error: ${requestResult['error']}'),
                                                     duration: const Duration(
                                                         seconds: 3),
                                                   ),

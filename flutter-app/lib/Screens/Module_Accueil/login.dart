@@ -1,27 +1,20 @@
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 class Login {
-  ///Check si l'utilisateur existe pour accéder à l'API
-  static checkUser(BuildContext context, String utilisateur, String mdp) async {
-    print('checkUser launched');
-    var url = Uri.http(
-        '127.0.0.1:8000', '/login', {'pseudo': utilisateur, 'mdp': mdp});
-    print('url parsed: $url');
-    // Await the http get response, then decode the json-formatted response.
-    var response = await http.post(url);
-    print('http post done');
+  static Future<Map<String, dynamic>> loginUser(
+      String username, String password) async {
+    final response =
+        await http.get(Uri.parse('127.0.0.1:8000/login/$username/$password'));
+
     if (response.statusCode == 200) {
-      return true; // Connexion réussie
+      return {'success': true};
+    } else if (response.statusCode == 401) {
+      return {'error': 'Mot de passe ou email invalide.'};
     } else if (response.statusCode == 403) {
-      var jsonResponse =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      var $errorMessage = jsonResponse['statut'];
-      print($errorMessage);
-      return $errorMessage; // Renvoie le message d'erreur
+      return {'error': 'Le compte a été désactivé.'};
     } else {
-      print('SAPA marché'); // Message générique en cas d'erreur inattendue
+      return {'error': 'Une erreur est survenue.'};
     }
   }
 }

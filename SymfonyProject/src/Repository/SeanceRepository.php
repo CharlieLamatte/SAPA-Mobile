@@ -66,8 +66,7 @@ class SeanceRepository extends ServiceEntityRepository
                 AND seance.id_user = :id_user';
 
         $resultSet = $conn->executeQuery($sql, ['id_user' => $id_user]);
-
-        // returns an array of arrays (i.e. a raw data set)
+        
         return $resultSet->fetchAllAssociative();
     }
 

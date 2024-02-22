@@ -2,14 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\USERSRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\UsersRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table('users')]
-#[ORM\Entity(repositoryClass: USERSRepository::class)]
-class USERS
+#[ORM\Entity(repositoryClass: UsersRepository::class)]
+class Users
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,16 +27,20 @@ class USERS
     #[ORM\Column]
     private ?int $compteur = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $fonction = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $recovery_token = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $recovery_token_created_at = null;
+
     #[ORM\Column(nullable: true)]
     private ?bool $is_deactivated = null;
 
-    #[ORM\ManyToMany(targetEntity: ARole::class, mappedBy: 'id_user')]
-    private Collection $roles;
-
-    public function __construct()
-    {
-        $this->roles = new ArrayCollection();
-    }
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $is_deactivated_updated_at = null;
 
     public function getId(): ?int
     {
@@ -92,6 +95,42 @@ class USERS
         return $this;
     }
 
+    public function getFonction(): ?string
+    {
+        return $this->fonction;
+    }
+
+    public function setFonction(?string $fonction): static
+    {
+        $this->fonction = $fonction;
+
+        return $this;
+    }
+
+    public function getRecoveryToken(): ?string
+    {
+        return $this->recovery_token;
+    }
+
+    public function setRecoveryToken(?string $recovery_token): static
+    {
+        $this->recovery_token = $recovery_token;
+
+        return $this;
+    }
+
+    public function getRecoveryTokenCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->recovery_token_created_at;
+    }
+
+    public function setRecoveryTokenCreatedAt(?\DateTimeInterface $recovery_token_created_at): static
+    {
+        $this->recovery_token_created_at = $recovery_token_created_at;
+
+        return $this;
+    }
+
     public function isIsDeactivated(): ?bool
     {
         return $this->is_deactivated;
@@ -104,29 +143,14 @@ class USERS
         return $this;
     }
 
-    /**
-     * @return Collection<int, ARole>
-     */
-    public function getRoles(): Collection
+    public function getIsDeactivatedUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->roles;
+        return $this->is_deactivated_updated_at;
     }
 
-    public function addRole(ARole $role): static
+    public function setIsDeactivatedUpdatedAt(?\DateTimeInterface $is_deactivated_updated_at): static
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles->add($role);
-            $role->addIdUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRole(ARole $role): static
-    {
-        if ($this->roles->removeElement($role)) {
-            $role->removeIdUser($this);
-        }
+        $this->is_deactivated_updated_at = $is_deactivated_updated_at;
 
         return $this;
     }

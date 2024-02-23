@@ -13,6 +13,7 @@ class SeanceController extends AbstractController
     #[Route('/Seances/GetAll/{id_user}', name: 'app_seance')]
     public function getAllSeances(EntityManagerInterface $entityManager, $id_user): JsonResponse
     {
+        //Implémenter l'authentification
         $seanceRepository = $entityManager->getRepository(Seance::class);
         $seances = $seanceRepository->findSeancesByUserId($id_user);
 

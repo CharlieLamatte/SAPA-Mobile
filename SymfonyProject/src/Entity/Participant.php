@@ -12,7 +12,7 @@ class Participant
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private ?int $id_seance = null;
 
     #[ORM\Column]
     private ?int $id_patient = null;
@@ -59,9 +59,15 @@ class Participant
     #[ORM\Column(length: 200)]
     private ?string $nom_antenne = null;
 
-    public function getId(): ?int
+    public function getIdSeance(): ?int
     {
-        return $this->id;
+        return $this->id_seance;
+    }
+
+    public function setIdSeance(?int $id_seance): static
+    {
+        $this->id_seance = $id_seance;
+        return $this;
     }
 
     public function getIdPatient(): ?int

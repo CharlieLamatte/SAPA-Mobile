@@ -65,7 +65,8 @@ class ParticipantRepository extends ServiceEntityRepository
 
         foreach ($results as $result) {
             $participant = new Participant();
-            $participant->setIdPatient($result['id_patient'])
+            $participant->setIdSeance($id_seance)
+                        ->setIdPatient($result['id_patient'])
                         ->setPresence($result['presence'])
                         ->setExcuse($result['excuse'])
                         ->setCommentaire($result['commentaire'])

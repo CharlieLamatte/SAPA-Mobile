@@ -1,8 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'myHome.dart';
-import 'login.dart';
+import '../../Utils/login.dart';
 
 class MyLoginPage extends StatefulWidget {
   const MyLoginPage({Key? key}) : super(key: key);
@@ -148,29 +147,10 @@ class MyLoginPageState extends State<MyLoginPage> {
                                           onPressed: () async {
                                             if (_formKey.currentState!
                                                 .validate()) {
-                                              var requestResult =
-                                                  await Login.loginUser(
-                                                      utilisateur,
-                                                      _passwordController.text);
-                                              if (requestResult
-                                                  .containsKey('success')) {
-                                                Navigator.push(
+                                              Login.loginUser(
                                                   context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          MyHomePage()),
-                                                );
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                        'Error: ${requestResult['error']}'),
-                                                    duration: const Duration(
-                                                        seconds: 3),
-                                                  ),
-                                                );
-                                              }
+                                                  utilisateur,
+                                                  _passwordController.text);
                                             }
                                           },
                                           child: const Text(

@@ -21,6 +21,8 @@ class Users
     #[ORM\Column(length: 150)]
     private ?string $pswd = null;
 
+    private ?array $roles = null;
+
     #[ORM\Column]
     private ?bool $est_coordinateur_peps = null;
 
@@ -67,6 +69,18 @@ class Users
     public function setPswd(string $pswd): static
     {
         $this->pswd = $pswd;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
 
         return $this;
     }

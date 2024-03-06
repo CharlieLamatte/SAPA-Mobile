@@ -97,8 +97,8 @@ class SeanceRepository extends ServiceEntityRepository
             $seance->setNomVille($result['nom_ville']);
             $seance->setTypeParcours($result['type_parcours']);
             $seance->setNomJour($result['nom_jour']);
-            $seance->setHeureDebut($result['id_heure_debut']);
-            $seance->setHeureFin($result['id_heure_fin']);
+            $seance->setHeureDebut($result['heure_debut']);
+            $seance->setHeureFin($result['heure_fin']);
             $seance->setDateSeance(new \DateTime($result['date_seance']));
             $seance->setIdCreneau($result['id_creneau']);
             $seance->setValidationSeance($result['valider']);

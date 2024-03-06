@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Participant;
+use App\Utils\EncryptionManager;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -57,6 +58,7 @@ class ParticipantRepository extends ServiceEntityRepository
     /**
      * @param int $id_seance
      * @return Participant[]
+     * Ajouter EncryptionManager::decrypt() à NomPatient, PrenomPatient et MailCoordonnees lorsqu'on aura la clé
      */
     public function findBySeanceId(int $id_seance): array
     {

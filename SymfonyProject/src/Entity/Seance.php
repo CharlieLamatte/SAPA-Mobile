@@ -61,10 +61,10 @@ class Seance
     private ?string $nom_jour = null;
 
     #[ORM\Column]
-    private ?int $heure_debut = null;
+    private ?string $heure_debut = null;
 
     #[ORM\Column]
-    private ?int $heure_fin = null;
+    private ?string $heure_fin = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_seance = null;
@@ -273,24 +273,24 @@ class Seance
         return $this;
     }
 
-    public function getHeureDebut(): ?int
+    public function getHeureDebut(): ?string
     {
         return $this->heure_debut;
     }
 
-    public function setHeureDebut(int $heure_debut): static
+    public function setHeureDebut(string $heure_debut): static
     {
         $this->heure_debut = $heure_debut;
 
         return $this;
     }
 
-    public function getHeureFin(): ?int
+    public function getHeureFin(): ?string
     {
         return $this->heure_fin;
     }
 
-    public function setHeureFin(int $heure_fin): static
+    public function setHeureFin(string $heure_fin): static
     {
         $this->heure_fin = $heure_fin;
 

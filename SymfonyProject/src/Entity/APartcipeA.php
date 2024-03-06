@@ -17,10 +17,10 @@ class APartcipeA
     private ?int $id_patient = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $presence = null;
+    private ?int $presence = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $excuse = null;
+    private ?int $excuse = null;
 
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $commentaire = null;
@@ -49,24 +49,24 @@ class APartcipeA
         return $this;
     }
 
-    public function isPresence(): ?bool
+    public function isPresence(): ?int
     {
         return $this->presence;
     }
 
-    public function setPresence(?bool $presence): static
+    public function setPresence(?int $presence): static
     {
         $this->presence = $presence;
 
         return $this;
     }
 
-    public function isExcuse(): ?bool
+    public function isExcuse(): ?int
     {
         return $this->excuse;
     }
 
-    public function setExcuse(?bool $excuse): static
+    public function setExcuse(?int $excuse): static
     {
         $this->excuse = $excuse;
 

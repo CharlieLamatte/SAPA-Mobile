@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Participant;
 use App\Utils\EncryptionManager;
+use App\Utils\ChaineCharacter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Sportsante86\Sapa\Outils\ChaineCharactere;
 
 /**
  * @extends ServiceEntityRepository<Participant>
@@ -66,6 +68,19 @@ class ParticipantRepository extends ServiceEntityRepository
         $participants = [];
 
         foreach ($results as $result) {
+            $result['nom_patient'] = !empty($result['nom_patient']) ? EncryptionManager::decrypt(
+                $result['nom_patient']
+            ) : "";
+            $result['prenom_patient'] = !empty($result['prenom_patient']) ? ChaineCharactere::mb_ucfirst(
+                mb_strtolower(
+                    EncryptionManager::decrypt(
+                        $result['prenom_patient']
+                    )
+                )
+            ) : "";
+            $result['mail_coordonnees'] = !empty($result['mail_coordonnees']) ? EncryptionManager::decrypt(
+                $result['mail_coordonnees']
+            ) : "";
             $participant = new Participant();
             $participant->setIdSeance($id_seance)
                         ->setIdPatient($result['id_patient'])

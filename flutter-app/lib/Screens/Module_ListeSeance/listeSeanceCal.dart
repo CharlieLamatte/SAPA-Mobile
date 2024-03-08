@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/Components/maNavDrawer.dart';
 import 'package:flutter_application_3/Screens/Components/monAppBar.dart';
@@ -38,13 +40,18 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
     super.dispose();
   }
 
+  final kEvents = LinkedHashMap<DateTime, List<Evenement>>(
+    equals: isSameDay,
+    hashCode: getHashCode,
+  );
+
   void initializeEvents() async {
     // Appel de la méthode fetchEventsFromAPI pour récupérer les événements depuis l'API
-    Map<DateTime, List<Evenement>> events = await fetchEventsFromAPI();
+    Map<DateTime, List<Evenement>>? events = await fetchEventsFromAPI(context);
 
     // Mise à jour de kEvents avec les événements récupérés
     setState(() {
-      kEvents.addAll(events);
+      kEvents.addAll(events!);
     });
   }
 

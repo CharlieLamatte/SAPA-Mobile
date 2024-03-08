@@ -1,10 +1,8 @@
-import 'dart:collection';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_3/Utils/sessionManager.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Evenement {
@@ -45,12 +43,9 @@ class Evenement {
   }
 }
 
-final kEvents = LinkedHashMap<DateTime, List<Evenement>>(
-  equals: isSameDay,
-  hashCode: getHashCode,
-);
-
-Future<Map<DateTime, List<Evenement>>> fetchEventsFromAPI() async {
+// ignore: body_might_complete_normally_nullable
+Future<Map<DateTime, List<Evenement>>?> fetchEventsFromAPI(
+    BuildContext context) async {
   var url = Uri.parse('http://127.0.0.1:8000/Seances/GetAll');
   Map<String, String> headers = {"Content-type": "application/json"};
   Map<String, dynamic> jsonBody = {
@@ -60,39 +55,63 @@ Future<Map<DateTime, List<Evenement>>> fetchEventsFromAPI() async {
   };
   String requestBody = json.encode(jsonBody);
 
-  var response = await http.post(
-    url,
-    headers: headers,
-    body: requestBody,
-  );
+  try {
+    var response = await http.post(
+      url,
+      headers: headers,
+      body: requestBody,
+    );
 
-  // Analyser la réponse JSON
-  final jsonData = json.decode(response.body);
+    // Analyze the JSON response
+    final List<dynamic> jsonDataList = json.decode(response.body);
 
-  // Convertir les données JSON en un format de Map<DateTime, List<Evenement>>
-  Map<DateTime, List<Evenement>> eventsMap = {};
+    if (response.statusCode == 200) {
+      // Convert JSON data into a Map<DateTime, List<Evenement>>
+      Map<DateTime, List<Evenement>> eventsMap = {};
+      sampleData.clear();
 
-  jsonData.forEach((dateString, eventsData) {
-    DateTime date = DateTime.parse(dateString);
-    List<Evenement> eventsList = (eventsData as List).map((eventJson) {
-      return Evenement.fromJson(eventJson);
-    }).toList();
-    eventsMap[date] = eventsList;
-  });
-  print(eventsMap);
-  return eventsMap;
-}
+      for (var jsonData in jsonDataList) {
+        // Create an Evenement object from each JSON object
+        Evenement evenement = Evenement.fromJson(jsonData);
 
-void main() {
-  // Appel de fetchEventsFromAPI
-  fetchEventsFromAPI().then((events) {
-    // Mise à jour de kEvents avec les événements récupérés
-    kEvents.addAll(events);
-  });
-}
+        // Extract the date from the Evenement object
+        DateTime date = evenement.from;
 
-int getHashCode(DateTime key) {
-  return key.day * 1000000 + key.month * 10000 + key.year;
+        // Check if the date exists in the map, if not, create a new list
+        if (!eventsMap.containsKey(date)) {
+          eventsMap[date] = [];
+        }
+
+        // Add the Evenement object to the list corresponding to the date
+        eventsMap[date]!.add(evenement);
+        sampleData.add(Appointment(
+          subject: evenement.title,
+          startTime: evenement.from,
+          endTime: evenement.to,
+          color: const Color(0xFFD6D6D6),
+        ));
+      }
+
+      return eventsMap;
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Error communicating with the database: ${response.body}'),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+      return null;
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error connecting. $e'),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+    return null;
+  }
 }
 
 /// Returns a list of [DateTime] objects from [first] to [last], inclusive.
@@ -108,6 +127,10 @@ final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
 final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
 
+int getHashCode(DateTime key) {
+  return key.day * 1000000 + key.month * 10000 + key.year;
+}
+
 class MeetingDataSource extends CalendarDataSource {
   MeetingDataSource(List<Appointment> source) {
     appointments = source;
@@ -115,23 +138,4 @@ class MeetingDataSource extends CalendarDataSource {
 }
 
 // Méthode pour Afficher les séances dans listeSeanceList
-final List<Appointment> sampleData = [
-  Appointment(
-    subject: "Rugby",
-    startTime: DateTime.now(),
-    endTime: DateTime.now().add(const Duration(hours: 1, minutes: 30)),
-    color: const Color(0xFFD6D6D6),
-  ),
-  Appointment(
-    subject: "Rugby",
-    startTime: DateTime.now().add(const Duration(hours: 1, minutes: 30)),
-    endTime: DateTime.now().add(const Duration(hours: 3)),
-    color: const Color(0xFFD6D6D6),
-  ),
-  Appointment(
-    subject: "Gym",
-    startTime: DateTime.now().add(const Duration(days: 2)),
-    endTime: DateTime.now().add(const Duration(days: 2, hours: 2)),
-    color: const Color(0xFFD6D6D6),
-  ),
-];
+final List<Appointment> sampleData = [];

@@ -17,8 +17,6 @@ class ListeSeanceList extends StatefulWidget {
 class _ListeSeanceListState extends State<ListeSeanceList> {
   void calendarTapped(CalendarTapDetails detail) {
     if (detail.targetElement == CalendarElement.appointment) {
-      final Appointment appointmentDetails = detail.appointments![0];
-
       Navigator.push(
           context,
           MaterialPageRoute(

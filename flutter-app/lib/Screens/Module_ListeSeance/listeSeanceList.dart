@@ -23,8 +23,7 @@ class _ListeSeanceListState extends State<ListeSeanceList> {
           context,
           MaterialPageRoute(
             builder: (context) => const MaSeance(),
-          )
-      );
+          ));
     }
   }
 
@@ -55,29 +54,23 @@ class _ListeSeanceListState extends State<ListeSeanceList> {
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(40),
                           ),
-                          child: const Text("Calendrier des séances à venir")),
+                          child: Text("Calendrier des séances à venir")),
                       Expanded(
-                          child: SfCalendar(
-                            view: CalendarView.schedule,
-                            scheduleViewSettings:
-                            ScheduleViewSettings(
+                        child: SfCalendar(
+                          view: CalendarView.schedule,
+                          scheduleViewSettings: ScheduleViewSettings(
                               hideEmptyScheduleWeek: true,
                               monthHeaderSettings: MonthHeaderSettings(
                                 backgroundColor: Theme.of(context).primaryColor,
                               ),
-                              appointmentTextStyle: const TextStyle(
-                                color: Colors.black
-                              )
-                            ),
-                            dataSource: MeetingDataSource(sampleData),
-                            onTap: calendarTapped,
-                          ),
+                              appointmentTextStyle:
+                                  TextStyle(color: Colors.black)),
+                          dataSource: MeetingDataSource(sampleData),
+                          onTap: calendarTapped,
+                        ),
                       )
                     ],
-                  )
-              )
-          )
-      ),
+                  )))),
     );
   }
 }

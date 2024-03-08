@@ -1,12 +1,11 @@
 import 'dart:collection';
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_application_3/Utils/sessionManager.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:http/http.dart' as http;
 
 class Evenement {
   final String title;
@@ -25,6 +24,15 @@ class Evenement {
     this.isAllDay = false,
   });
 
+  factory Evenement.fromJson(Map<String, dynamic> json) {
+    return Evenement(
+      title: json['nom_creneau'],
+      description: json['type_parcours'],
+      from: DateTime.parse(json['date_seance'] + 'T' + json['heure_debut']),
+      to: DateTime.parse(json['date_seance'] + 'T' + json['heure_fin']),
+    );
+  }
+
   @override
   String toString() => title;
 
@@ -35,91 +43,53 @@ class Evenement {
   String toTimeToString() {
     return DateFormat('kk:mm').format(to);
   }
-
-  factory Evenement.fromJson(Map<String, dynamic> json) {
-    return Evenement(
-      title: json['type_seance'] ?? '',
-      description: json['nom_creneau'] ?? '',
-      from: DateTime.parse(json['heure_debut'] ?? ''),
-      to: DateTime.parse(json['heure_fin'] ?? ''),
-    );
-  }
-
-Future<void> fetchSeances(int userId) async {
-  var url = Uri.parse('http://127.0.0.1:8000/login');
-    Map<String, String> headers = {"Content-type": "application/json"};
-    Map<String, dynamic> jsonBody = {"username": SessionManager.username, "password": SessionManager.password, "id_user": SessionManager.id_user};
-    String requestBody = json.encode(jsonBody);
-
-    try {
-      var response = await http.post(
-        url,
-        headers: headers,
-        body: requestBody,
-      );
-
-      final jsonResponse = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        addEvents = {};
-        for (dynamic seanceData in jsonResponse) {
-          DateTime date = DateTime.parse(formattedString)
-        }
-    }
-
-  if (response.statusCode == 200) {
-    // Si la requête réussit, décoder le JSON et créer une liste d'objets Seance
-    List<dynamic> jsonResponse = json.decode(response.body);
-
-        // Convert the decoded data to the required format
-        addEvents = {};
-        for (dynamic eventData in jsonResponse) {
-          print('Event Data: $eventData');
-          DateTime date = DateTime.parse(eventData['date_seance']);
-          print('Date: $date');
-          if (!addEvents.containsKey(date)) {
-            addEvents[date] = [];
-          }
-          addEvents[date]!.add(
-            Evenement(
-              title: eventData['nom_creneau'],
-              description: eventData['type_seance'],
-              from: DateTime.parse(eventData['heure_debut']),
-              to: DateTime.parse(eventData['heure_fin']),
-            ),
-          );
-        }
-
-        kEvents.clear();
-        kEvents.addAll(addEvents);
-
-        // Update the 'sampleData' variable if you need it for something else
-        sampleData = addEvents.entries
-            .expand((entry) => entry.value)
-            .map((event) => Appointment(
-                  subject: event.title,
-                  startTime: event.from,
-                  endTime: event.to,
-                  color: const Color(0xFFD6D6D6),
-                ))
-            .toList();
-      } else {
-        // Handle error when fetching data from the server
-        print('Error else fetching events: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Handle other errors
-      print('Error catch fetching events: $e');
-    }
-  }
 }
 
 final kEvents = LinkedHashMap<DateTime, List<Evenement>>(
   equals: isSameDay,
   hashCode: getHashCode,
-)..addAll(addEvents);
+);
 
-Map<DateTime, List<Evenement>> addEvents = {};
+Future<Map<DateTime, List<Evenement>>> fetchEventsFromAPI() async {
+  var url = Uri.parse('http://127.0.0.1:8000/Seances/GetAll');
+  Map<String, String> headers = {"Content-type": "application/json"};
+  Map<String, dynamic> jsonBody = {
+    "username": SessionManager.username,
+    "password": SessionManager.password,
+    "id_user": SessionManager.id_user
+  };
+  String requestBody = json.encode(jsonBody);
+
+  var response = await http.post(
+    url,
+    headers: headers,
+    body: requestBody,
+  );
+
+  // Analyser la réponse JSON
+  final jsonData = json.decode(response.body);
+
+  // Convertir les données JSON en un format de Map<DateTime, List<Evenement>>
+  Map<DateTime, List<Evenement>> eventsMap = {};
+
+  jsonData.forEach((dateString, eventsData) {
+    DateTime date = DateTime.parse(dateString);
+    List<Evenement> eventsList = (eventsData as List).map((eventJson) {
+      return Evenement.fromJson(eventJson);
+    }).toList();
+    eventsMap[date] = eventsList;
+  });
+  print(eventsMap);
+  return eventsMap;
+}
+
+void main() {
+  // Appel de fetchEventsFromAPI
+  fetchEventsFromAPI().then((events) {
+    // Mise à jour de kEvents avec les événements récupérés
+    kEvents.addAll(events);
+  });
+}
 
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
@@ -144,4 +114,24 @@ class MeetingDataSource extends CalendarDataSource {
   }
 }
 
-List<Appointment> sampleData = [];
+// Méthode pour Afficher les séances dans listeSeanceList
+final List<Appointment> sampleData = [
+  Appointment(
+    subject: "Rugby",
+    startTime: DateTime.now(),
+    endTime: DateTime.now().add(const Duration(hours: 1, minutes: 30)),
+    color: const Color(0xFFD6D6D6),
+  ),
+  Appointment(
+    subject: "Rugby",
+    startTime: DateTime.now().add(const Duration(hours: 1, minutes: 30)),
+    endTime: DateTime.now().add(const Duration(hours: 3)),
+    color: const Color(0xFFD6D6D6),
+  ),
+  Appointment(
+    subject: "Gym",
+    startTime: DateTime.now().add(const Duration(days: 2)),
+    endTime: DateTime.now().add(const Duration(days: 2, hours: 2)),
+    color: const Color(0xFFD6D6D6),
+  ),
+];

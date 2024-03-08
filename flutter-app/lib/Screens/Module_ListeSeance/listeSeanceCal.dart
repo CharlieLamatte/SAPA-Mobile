@@ -28,9 +28,8 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
-    _populateEvents(); // Call method to populate kEvents
-    _selectedEvents =
-        ValueNotifier(_getEventsForDay(_selectedDay!) as List<Evenement>);
+    initializeEvents();
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
 
   @override
@@ -39,37 +38,26 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
     super.dispose();
   }
 
-  Future<List<Evenement>> _getEventsForDay(DateTime day) async {
-    await Evenement.fetchEvents(); // Call fetchEvents to update the events
+  void initializeEvents() async {
+    // Appel de la méthode fetchEventsFromAPI pour récupérer les événements depuis l'API
+    Map<DateTime, List<Evenement>> events = await fetchEventsFromAPI();
+
+    // Mise à jour de kEvents avec les événements récupérés
+    setState(() {
+      kEvents.addAll(events);
+    });
+  }
+
+  List<Evenement> _getEventsForDay(DateTime day) {
     return kEvents[day] ?? [];
   }
 
-  Future<void> _populateEvents() async {
-    await Evenement.fetchEvents(); // Fetch events data
-    setState(() {}); // Trigger a rebuild to reflect the updated kEvents
-  }
-
-  List<Evenement> eventsForDay(DateTime day) {
-    // Check if kEvents contains events for the given day
-    if (kEvents.containsKey(day)) {
-      // Return the events for the given day
-      return kEvents[day]!;
-    } else {
-      // Return an empty list if no events are available for the given day
-      return [];
-    }
-  }
-
-  Future<List<Evenement>> _getEventsForRange(
-      DateTime start, DateTime end) async {
+  List<Evenement> _getEventsForRange(DateTime start, DateTime end) {
     final days = daysInRange(start, end);
 
-    List<Evenement> events = [];
-    for (final d in days) {
-      List<Evenement> dayEvents = await _getEventsForDay(d);
-      events.addAll(dayEvents);
-    }
-    return events;
+    return [
+      for (final d in days) ..._getEventsForDay(d),
+    ];
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
@@ -82,7 +70,7 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
 
-      _selectedEvents.value = _getEventsForDay(selectedDay) as List<Evenement>;
+      _selectedEvents.value = _getEventsForDay(selectedDay);
     }
   }
 
@@ -97,11 +85,11 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
 
     // `start` or `end` could be null
     if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end) as List<Evenement>;
+      _selectedEvents.value = _getEventsForRange(start, end);
     } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start) as List<Evenement>;
+      _selectedEvents.value = _getEventsForDay(start);
     } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end) as List<Evenement>;
+      _selectedEvents.value = _getEventsForDay(end);
     }
   }
 
@@ -133,7 +121,7 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(40),
                     ),
-                    child: const Text("Liste des séances à venir")),
+                    child: Text("Liste des séances à venir")),
                 TableCalendar<Evenement>(
                   firstDay: kFirstDay,
                   lastDay: kLastDay,
@@ -143,7 +131,7 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
                   rangeEndDay: _rangeEnd,
                   calendarFormat: _calendarFormat,
                   rangeSelectionMode: _rangeSelectionMode,
-                  eventLoader: eventsForDay,
+                  eventLoader: _getEventsForDay,
                   startingDayOfWeek: StartingDayOfWeek.monday,
                   calendarStyle: const CalendarStyle(
                     // Use `CalendarStyle` to customize the UI
@@ -162,7 +150,7 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
                     _focusedDay = focusedDay;
                   },
                   locale: "fr_FR",
-                  headerStyle: const HeaderStyle(titleCentered: true),
+                  headerStyle: HeaderStyle(titleCentered: true),
                 ),
                 const SizedBox(height: 8.0),
                 Expanded(

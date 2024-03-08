@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/Components/maNavDrawer.dart';
 import 'package:flutter_application_3/Screens/Components/monAppBar.dart';
-import 'package:flutter_application_3/Utils/sessionManager.dart';
 import 'Accueil_Components/myCategoryGrid.dart';
 import 'Accueil_Components/myHomeReminder.dart';
 import 'Accueil_Components/myMotivationCarrousel.dart';
@@ -16,14 +15,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  String prenom = SessionManager.username;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: MonAppBar(
-          myTitle: 'Bienvenue $prenom',
+          myTitle: 'Bienvenue',
         ),
         drawer: const MyNavDrawer(),
         body: const SingleChildScrollView(

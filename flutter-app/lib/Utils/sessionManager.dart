@@ -57,4 +57,15 @@ class SessionManager {
   static set fonction(String value) {
     _fonction = value;
   }
+
+  static deconnect() {
+    _username = '';
+    _password = '';
+    _isConnected = false;
+    _id_user = 0;
+    _roles = [];
+    _est_coordinateur_peps = false;
+    _compteur = 0;
+    _fonction = '';
+  }
 }

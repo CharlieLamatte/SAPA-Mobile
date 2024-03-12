@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/Components/maNavDrawer.dart';
 import 'package:flutter_application_3/Screens/Components/monAppBar.dart';
 import 'package:flutter_application_3/Screens/Components/monTitreDeCategorie.dart';
+import 'package:flutter_application_3/Screens/Module_ListeSeance/ListeSeance_Utils/evenement.dart';
 import 'package:flutter_application_3/Screens/Module_ListeSeance/listeSeanceCal.dart';
 
 import '../Module_Emargement/Emargement.dart';
@@ -12,47 +13,21 @@ import 'modifChampDeSeance.dart';
 bool is_Editing = false;
 
 class MaSeance extends StatefulWidget {
-
-  const MaSeance({Key? key, }) : super(key: key);
+  final Evenement seance;
+  const MaSeance({
+    Key? key,
+    required this.seance,
+  }) : super(key: key);
 
   @override
   State<MaSeance> createState() => _MaSeanceState();
 }
 
 class _MaSeanceState extends State<MaSeance> {
-
-
-  // liste "Details de la seance"
-  List<String> ipCreneau     = ["Créneau", "Tennis en salle"];
-  List<String> ipStructure   = ["Structure", "Communauté Tennis"];
-  List<String> ipIntervenant = ["Intervenant", "Cyrano BERGERAC"];
-  List<String> ipLieu        = ["Lieu", "11 rue Tennis Poitiers 86000"];
-  List<String> ipParcours    = ["Parcours", "Autre"];
-  List<String> ipType        = ["Type", "Collectif"];
-  List<String> ipDate        = ["Date", "07/12/2022"];
-  List<String> ipDebut       = ["Debut", "10:00"];
-  List<String> ipFin         = ["Fin", "12:00"];
-  List<String> ipEtat        = ["Etat", "En attente d'émargement"];
-
   @override
   Widget build(BuildContext context) {
-    // Liste "Informations personnelles"
-    List<List<String>> infoSeance = [
-      ipCreneau,
-      ipStructure,
-      ipIntervenant,
-      ipLieu,
-      ipParcours,
-      ipType,
-      ipDate,
-      ipDebut,
-      ipFin,
-      ipEtat,
-    ];
-
     return SafeArea(
       child: Scaffold(
-
         //////////////////////////////////////////////////////////////////////
         // App bar ///////////////////////////////////////////////////////////
         appBar: MonAppBar(myTitle: 'Détails de la séance'),
@@ -60,16 +35,11 @@ class _MaSeanceState extends State<MaSeance> {
 
         body: Padding(
           padding: const EdgeInsets.only(
-              left: 25.0,
-              top: 15.0,
-              right: 25.0,
-              bottom: 15.0
-          ),
+              left: 25.0, top: 15.0, right: 25.0, bottom: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             // étire sur tt l'écran
             children: [
-
               //////////////////////////////////////////////////////////////////
               // Scroll view ///////////////////////////////////////////////////
               Expanded(
@@ -77,43 +47,31 @@ class _MaSeanceState extends State<MaSeance> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Container(
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(100.0)
-                            ),
-                            color: Theme
-                                .of(context)
-                                .primaryColorLight,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(100.0)),
+                            color: Theme.of(context).primaryColorLight,
                           ),
                           width: 115.0,
                           height: 40.0,
-                          child:
-                          ElevatedButton(
+                          child: ElevatedButton(
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
+                                      RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10.0),
-                                  )
-                              ),
-                              backgroundColor: MaterialStateProperty.all<
-                                  Color>(
-                                  Theme
-                                      .of(context)
-                                      .primaryColorLight
-                              ),
+                                borderRadius: BorderRadius.circular(10.0),
+                              )),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Theme.of(context).primaryColorLight),
                             ),
-
                             onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                    builder: (context) => const ListeSeanceCal(),
-                                    )
-                                );
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ListeSeanceCal(),
+                                  ));
                             },
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -124,33 +82,26 @@ class _MaSeanceState extends State<MaSeance> {
                                   Text(
                                     'Retour',
                                     style: TextStyle(
-                                      color: Theme
-                                          .of(context)
-                                          .primaryColor,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                ]
-                            ),
-                          )
-                      ),
+                                ]),
+                          )),
 
                       ////////////////////////////////////////////////////
                       // Partie infos séance ///////////////////////
                       ExpandablePanel(
                         // Titre de la partie //////////////////////
-                        header:
-                        const Row(
-                            children: [
-                              SizedBox(
-                                height: 50.0,
-                              ),
-                              Expanded(
-                                child: MonTitreDeCategorie(
-                                  myLabelTitle: "Détails de la séance",
-                                ),
-                              ),
-                            ]
-                        ),
+                        header: const Row(children: [
+                          SizedBox(
+                            height: 50.0,
+                          ),
+                          Expanded(
+                            child: MonTitreDeCategorie(
+                              myLabelTitle: "Détails de la séance",
+                            ),
+                          ),
+                        ]),
 
                         // Contenue de la partie ///////////////////
                         collapsed: const SizedBox(
@@ -165,8 +116,8 @@ class _MaSeanceState extends State<MaSeance> {
                             ///////////////////////////////////////////////
                             // Créneau ///////////////////////////////////
                             MonChampDeSeance(
-                              myLabel: infoSeance[0][0],
-                              myData: infoSeance[0][1],
+                              myLabel: "Créneau",
+                              myData: widget.seance.nomCreneau,
                             ),
 
                             const SizedBox(
@@ -176,8 +127,8 @@ class _MaSeanceState extends State<MaSeance> {
                             //////////////////////////////////////////
                             // Structure ///////////////////////////////////
                             MonChampDeSeance(
-                              myLabel: infoSeance[1][0],
-                              myData: infoSeance[1][1],
+                              myLabel: "Structure",
+                              myData: widget.seance.nomStructure,
                             ),
 
                             const SizedBox(
@@ -187,8 +138,9 @@ class _MaSeanceState extends State<MaSeance> {
                             //////////////////////////////////////////
                             // Intervenant //////////////////////////////////
                             MonChampDeSeance(
-                              myLabel: infoSeance[2][0],
-                              myData: infoSeance[2][1],
+                              myLabel: "Intervenant",
+                              myData:
+                                  "${widget.seance.prenomCoordonnes} ${widget.seance.nomCoordonnees}",
                             ),
 
                             const SizedBox(
@@ -198,8 +150,9 @@ class _MaSeanceState extends State<MaSeance> {
                             //////////////////////////////////////////
                             // Lieu ///////////////////////////////////
                             ModifChampDeSeance(
-                              myLabel: infoSeance[3][0],
-                              myData: infoSeance[3][1],
+                              myLabel: "Adresse",
+                              myData:
+                                  "${widget.seance.nomAdresse} ${widget.seance.complementAdresse} ${widget.seance.nomVille} ${widget.seance.codePostal}",
                               is_editabled: is_Editing,
                             ),
 
@@ -210,8 +163,8 @@ class _MaSeanceState extends State<MaSeance> {
                             //////////////////////////////////////////
                             // Parcours //////////////////////////////
                             MonChampDeSeance(
-                              myLabel: infoSeance[4][0],
-                              myData: infoSeance[4][1],
+                              myLabel: "Parcours",
+                              myData: widget.seance.typeParcours,
                             ),
 
                             const SizedBox(
@@ -221,31 +174,31 @@ class _MaSeanceState extends State<MaSeance> {
                             //////////////////////////////////////////
                             // Type //////////////////////////
                             MonChampDeSeance(
-                              myLabel: infoSeance[5][0],
-                              myData: infoSeance[5][1],
+                              myLabel: "Type",
+                              myData: widget.seance.typeSeance,
                             ),
 
                             const SizedBox(
                               height: 15.0,
                             ),
 
-                            //////////////////////////////////////////
-                            // Date /////////////////////////////////
-                            ModifChampDeSeance(
-                              myLabel: infoSeance[6][0],
-                              myData: infoSeance[6][1],
-                              is_editabled: is_Editing,
-                            ),
+                            // //////////////////////////////////////////
+                            // // Date /////////////////////////////////
+                            // ModifChampDeSeance(
+                            //   myLabel: "Date",
+                            //   myData: "${widget.seance.from}",
+                            //   is_editabled: is_Editing,
+                            // ),
 
-                            const SizedBox(
-                              height: 15.0,
-                            ),
+                            // const SizedBox(
+                            //   height: 15.0,
+                            // ),
 
                             //////////////////////////////////////////
                             // Debut ///////////////////////////////
                             ModifChampDeSeance(
-                              myLabel: infoSeance[7][0],
-                              myData: infoSeance[7][1],
+                              myLabel: "Début",
+                              myData: "${widget.seance.from}",
                               is_editabled: is_Editing,
                             ),
 
@@ -256,8 +209,8 @@ class _MaSeanceState extends State<MaSeance> {
                             //////////////////////////////////////////
                             // Fin ////////////////////////////
                             ModifChampDeSeance(
-                              myLabel: infoSeance[8][0],
-                              myData: infoSeance[8][1],
+                              myLabel: "Fin",
+                              myData: "${widget.seance.to}",
                               is_editabled: is_Editing,
                             ),
 
@@ -268,8 +221,8 @@ class _MaSeanceState extends State<MaSeance> {
                             //////////////////////////////////////////
                             // Etat ///////////////////////////
                             MonChampDeSeance(
-                              myLabel: infoSeance[9][0],
-                              myData: infoSeance[9][1],
+                              myLabel: "Séance émargée ?",
+                              myData: "${widget.seance.validationSeance}",
                             ),
 
                             const SizedBox(
@@ -289,32 +242,22 @@ class _MaSeanceState extends State<MaSeance> {
                           Container(
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.all(
-                                    Radius.circular(100.0)
-                                ),
-                                color: Theme
-                                    .of(context)
-                                    .primaryColorLight,
+                                    Radius.circular(100.0)),
+                                color: Theme.of(context).primaryColorLight,
                               ),
                               width: 115.0,
                               height: 40.0,
-                              child:
-                              ElevatedButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
+                                          RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      )
-                                  ),
-                                  backgroundColor: MaterialStateProperty.all<
-                                      Color>(
-                                      Theme
-                                          .of(context)
-                                          .primaryColorLight
-                                  ),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  )),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Theme.of(context).primaryColorLight),
                                 ),
-
                                 onPressed: () {
                                   setState(() {
                                     is_Editing = true;
@@ -325,12 +268,9 @@ class _MaSeanceState extends State<MaSeance> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       InkWell(
-                                        child: Icon(
-                                            Icons.create_rounded,
-                                            color: Theme
-                                                .of(context)
-                                                .primaryColor
-                                        ),
+                                        child: Icon(Icons.create_rounded,
+                                            color:
+                                                Theme.of(context).primaryColor),
                                       ),
                                       const SizedBox(
                                         width: 5.0,
@@ -338,49 +278,33 @@ class _MaSeanceState extends State<MaSeance> {
                                       Text(
                                         'Modifier',
                                         style: TextStyle(
-                                          color: Theme
-                                              .of(context)
-                                              .primaryColor,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
-                                    ]
-                                ),
-                              )
-                          ),
-
+                                    ]),
+                              )),
                           const SizedBox(
                             width: 25.0,
                           ),
-
                           Container(
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.all(
-                                    Radius.circular(100.0)
-                                ),
-                                color: Theme
-                                    .of(context)
-                                    .primaryColorLight,
+                                    Radius.circular(100.0)),
+                                color: Theme.of(context).primaryColorLight,
                               ),
                               width: 115.0,
                               height: 40.0,
-                              child:
-                              ElevatedButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
+                                          RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      )
-                                  ),
-                                  backgroundColor: MaterialStateProperty.all<
-                                      Color>(
-                                      Theme
-                                          .of(context)
-                                          .primaryColorLight
-                                  ),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  )),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Theme.of(context).primaryColorLight),
                                 ),
-
                                 onPressed: () {
                                   setState(() {
                                     is_Editing = false;
@@ -391,12 +315,9 @@ class _MaSeanceState extends State<MaSeance> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       InkWell(
-                                        child: Icon(
-                                            Icons.check,
-                                            color: Theme
-                                                .of(context)
-                                                .primaryColor
-                                        ),
+                                        child: Icon(Icons.check,
+                                            color:
+                                                Theme.of(context).primaryColor),
                                       ),
                                       const SizedBox(
                                         width: 5.0,
@@ -404,49 +325,33 @@ class _MaSeanceState extends State<MaSeance> {
                                       Text(
                                         'Valider',
                                         style: TextStyle(
-                                          color: Theme
-                                              .of(context)
-                                              .primaryColor,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
-                                    ]
-                                ),
-                              )
-                          ),
-
+                                    ]),
+                              )),
                           const SizedBox(
                             width: 25.0,
                           ),
-
                           Container(
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.all(
-                                    Radius.circular(100.0)
-                                ),
-                                color: Theme
-                                    .of(context)
-                                    .primaryColorLight,
+                                    Radius.circular(100.0)),
+                                color: Theme.of(context).primaryColorLight,
                               ),
                               width: 115.0,
                               height: 40.0,
-                              child:
-                              ElevatedButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
+                                          RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      )
-                                  ),
-                                  backgroundColor: MaterialStateProperty.all<
-                                      Color>(
-                                      Theme
-                                          .of(context)
-                                          .primaryColorLight
-                                  ),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  )),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Theme.of(context).primaryColorLight),
                                 ),
-
                                 onPressed: () {
                                   setState(() {
                                     is_Editing = false;
@@ -457,12 +362,9 @@ class _MaSeanceState extends State<MaSeance> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       InkWell(
-                                        child: Icon(
-                                            Icons.close,
-                                            color: Theme
-                                                .of(context)
-                                                .primaryColor
-                                        ),
+                                        child: Icon(Icons.close,
+                                            color:
+                                                Theme.of(context).primaryColor),
                                       ),
                                       const SizedBox(
                                         width: 5.0,
@@ -470,17 +372,11 @@ class _MaSeanceState extends State<MaSeance> {
                                       Text(
                                         'Annuler',
                                         style: TextStyle(
-                                          color: Theme
-                                              .of(context)
-                                              .primaryColor,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
-                                    ]
-                                ),
-
-                              )
-                          ),
-
+                                    ]),
+                              )),
                         ],
                       ),
 
@@ -494,41 +390,31 @@ class _MaSeanceState extends State<MaSeance> {
                           Container(
                               decoration: BoxDecoration(
                                 borderRadius: const BorderRadius.all(
-                                    Radius.circular(100.0)
-                                ),
-                                color: Theme
-                                    .of(context)
-                                    .primaryColorLight,
+                                    Radius.circular(100.0)),
+                                color: Theme.of(context).primaryColorLight,
                               ),
                               width: 115.0,
                               height: 40.0,
-                              child:
-                              ElevatedButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
-                                      RoundedRectangleBorder>(
+                                          RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            10.0),
-                                      )
-                                  ),
-                                  backgroundColor: MaterialStateProperty.all<
-                                      Color>(
-                                      Theme
-                                          .of(context)
-                                          .primaryColorLight
-                                  ),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  )),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Theme.of(context).primaryColorLight),
                                 ),
-
                                 onPressed: () {
                                   setState(() {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => const Emargement(),
+                                        builder: (context) =>
+                                            Emargement(seance: widget.seance),
                                       ),
                                     );
-
                                   });
                                 },
                                 child: Row(
@@ -540,19 +426,13 @@ class _MaSeanceState extends State<MaSeance> {
                                       Text(
                                         'Émarger',
                                         style: TextStyle(
-                                          color: Theme
-                                              .of(context)
-                                              .primaryColor,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
-                                    ]
-                                ),
-                              )
-                          ),
-
+                                    ]),
+                              )),
 
                           // Bouton de modification des infos sur "Ma séance"
-
 
                           const SizedBox(
                             height: 15.0,

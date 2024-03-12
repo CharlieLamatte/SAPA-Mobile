@@ -178,12 +178,17 @@ class _ListeSeanceCalState extends State<ListeSeanceCal> {
                             ),
                             child: ListTile(
                               onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MaSeance(),
-                                  )),
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MaSeance(
+                                    seance: value[
+                                        index], // Passer l'objet Evenement
+                                  ),
+                                ),
+                              ),
                               title: Text(
-                                  '${value[index]} ${value[index].fromTimeToString()}-${value[index].toTimeToString()}'),
+                                '${value[index]} ${value[index].fromTimeToString()}-${value[index].toTimeToString()}',
+                              ),
                             ),
                           );
                         },

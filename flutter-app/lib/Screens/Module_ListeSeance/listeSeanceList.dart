@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/Components/maNavDrawer.dart';
 import 'package:flutter_application_3/Screens/Components/monAppBar.dart';
@@ -15,13 +16,36 @@ class ListeSeanceList extends StatefulWidget {
 }
 
 class _ListeSeanceListState extends State<ListeSeanceList> {
-  void calendarTapped(CalendarTapDetails detail) {
+  Evenement? selectedEvent; // Ajout de la variable membre
+  void calendarTapped(CalendarTapDetails detail) async {
     if (detail.targetElement == CalendarElement.appointment) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MaSeance(),
-          ));
+      final Appointment tappedAppointment =
+          detail.appointments![0] as Appointment;
+
+      // Attendre que la fonction asynchrone se termine et renvoie la valeur
+      Map<DateTime, List<Evenement>>? eventsMap =
+          await fetchEventsFromAPI(context);
+
+      if (eventsMap != null) {
+        final Evenement? event = eventsMap.values
+            .expand((list) => list)
+            .firstWhereOrNull(
+                (event) => event.nomCreneau == tappedAppointment.subject);
+
+        if (event != null) {
+          setState(() {
+            selectedEvent = event;
+          });
+
+          // Passer l'objet Evenement en paramètre lors de la navigation
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MaSeance(seance: selectedEvent!),
+            ),
+          );
+        }
+      }
     }
   }
 

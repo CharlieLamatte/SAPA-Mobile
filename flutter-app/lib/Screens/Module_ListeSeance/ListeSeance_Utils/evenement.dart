@@ -6,33 +6,87 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Evenement {
-  final String title;
-  final String description;
+  final int idSeance;
+  final String nomCreneau;
+  final int idTypeParcours;
+  final String nombreParticipants;
+  final String typeSeance;
+  final int idJour;
+  final String nomStructure;
+  final int idStructure;
+  final String nomCoordonnees;
+  final String prenomCoordonnes;
+  final String nomAdresse;
+  final String complementAdresse;
+  final String codePostal;
+  final String nomVille;
+  final String typeParcours;
+  final String nomJour;
   final DateTime from;
   final DateTime to;
+  final int idCreneau;
+  final bool validationSeance;
+  final String commentaireSeance;
+  final int idUser;
   final Color backgroundColor;
   final bool isAllDay;
 
   const Evenement({
-    required this.title,
-    required this.description,
+    required this.idSeance,
+    required this.nomCreneau,
+    required this.idTypeParcours,
+    required this.nombreParticipants,
+    required this.typeSeance,
+    required this.idJour,
+    required this.nomStructure,
+    required this.idStructure,
+    required this.nomCoordonnees,
+    required this.prenomCoordonnes,
+    required this.nomAdresse,
+    required this.complementAdresse,
+    required this.codePostal,
+    required this.nomVille,
+    required this.typeParcours,
+    required this.nomJour,
     required this.from,
     required this.to,
+    required this.idCreneau,
+    required this.validationSeance,
+    required this.commentaireSeance,
+    required this.idUser,
     this.backgroundColor = Colors.teal,
     this.isAllDay = false,
   });
 
   factory Evenement.fromJson(Map<String, dynamic> json) {
     return Evenement(
-      title: json['nom_creneau'],
-      description: json['type_parcours'],
+      idSeance: json['id'],
+      nomCreneau: json['nom_creneau'],
+      idTypeParcours: json['id_type_parcours'],
+      nombreParticipants: json['nombre_participants'],
+      typeSeance: json['type_seance'],
+      idJour: json['id_jour'],
+      nomStructure: json['nom_structure'],
+      idStructure: json['id_structure'],
+      nomCoordonnees: json['nom_coordonnees'],
+      prenomCoordonnes: json['prenom_coordonnees'],
+      nomAdresse: json['nom_adresse'],
+      complementAdresse: json['complement_adresse'],
+      codePostal: json['code_postal'],
+      nomVille: json['nom_ville'],
+      typeParcours: json['type_parcours'],
+      nomJour: json['nom_jour'],
       from: DateTime.parse(json['date_seance'] + 'T' + json['heure_debut']),
       to: DateTime.parse(json['date_seance'] + 'T' + json['heure_fin']),
+      idCreneau: json['id_creneau'],
+      validationSeance: json['validation_seance'],
+      commentaireSeance: json['commentaire_seance'],
+      idUser: json['id_user'],
     );
   }
 
   @override
-  String toString() => title;
+  String toString() => nomCreneau;
 
   String fromTimeToString() {
     return DateFormat('kk:mm').format(from);
@@ -85,7 +139,7 @@ Future<Map<DateTime, List<Evenement>>?> fetchEventsFromAPI(
         // Add the Evenement object to the list corresponding to the date
         eventsMap[date]!.add(evenement);
         sampleData.add(Appointment(
-          subject: evenement.title,
+          subject: evenement.nomCreneau,
           startTime: evenement.from,
           endTime: evenement.to,
           color: const Color(0xFFD6D6D6),

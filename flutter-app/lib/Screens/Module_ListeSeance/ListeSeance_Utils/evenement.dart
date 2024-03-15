@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_application_3/Utils/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_application_3/Utils/sessionManager.dart';
 import 'package:flutter/material.dart';
@@ -7,52 +8,52 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Evenement {
   final int idSeance;
-  final String nomCreneau;
-  final int idTypeParcours;
-  final String nombreParticipants;
-  final String typeSeance;
-  final int idJour;
-  final String nomStructure;
-  final int idStructure;
-  final String nomCoordonnees;
-  final String prenomCoordonnes;
-  final String nomAdresse;
-  final String complementAdresse;
-  final String codePostal;
-  final String nomVille;
-  final String typeParcours;
-  final String nomJour;
+  final String? nomCreneau;
+  final int? idTypeParcours;
+  final String? nombreParticipants;
+  final String? typeSeance;
+  final int? idJour;
+  final String? nomStructure;
+  final int? idStructure;
+  final String? nomCoordonnees;
+  final String? prenomCoordonnes;
+  final String? nomAdresse;
+  final String? complementAdresse;
+  final String? codePostal;
+  final String? nomVille;
+  final String? typeParcours;
+  final String? nomJour;
   final DateTime from;
   final DateTime to;
   final int idCreneau;
-  final bool validationSeance;
-  final String commentaireSeance;
+  final bool? validationSeance;
+  final String? commentaireSeance;
   final int idUser;
   final Color backgroundColor;
   final bool isAllDay;
 
   const Evenement({
     required this.idSeance,
-    required this.nomCreneau,
-    required this.idTypeParcours,
-    required this.nombreParticipants,
-    required this.typeSeance,
-    required this.idJour,
-    required this.nomStructure,
-    required this.idStructure,
-    required this.nomCoordonnees,
-    required this.prenomCoordonnes,
-    required this.nomAdresse,
-    required this.complementAdresse,
-    required this.codePostal,
-    required this.nomVille,
-    required this.typeParcours,
-    required this.nomJour,
+    this.nomCreneau,
+    this.idTypeParcours,
+    this.nombreParticipants,
+    this.typeSeance,
+    this.idJour,
+    this.nomStructure,
+    this.idStructure,
+    this.nomCoordonnees,
+    this.prenomCoordonnes,
+    this.nomAdresse,
+    this.complementAdresse,
+    this.codePostal,
+    this.nomVille,
+    this.typeParcours,
+    this.nomJour,
     required this.from,
     required this.to,
     required this.idCreneau,
-    required this.validationSeance,
-    required this.commentaireSeance,
+    this.validationSeance,
+    this.commentaireSeance,
     required this.idUser,
     this.backgroundColor = Colors.teal,
     this.isAllDay = false,
@@ -86,7 +87,7 @@ class Evenement {
   }
 
   @override
-  String toString() => nomCreneau;
+  String toString() => nomCreneau ?? "";
 
   String fromTimeToString() {
     return DateFormat('kk:mm').format(from);
@@ -100,7 +101,7 @@ class Evenement {
 // ignore: body_might_complete_normally_nullable
 Future<Map<DateTime, List<Evenement>>?> fetchEventsFromAPI(
     BuildContext context) async {
-  var url = Uri.parse('http://127.0.0.1:8000/Seances/GetAll');
+  var url = Uri.parse('http://${Login.hostAdress}/SAPA-Mobile/Seances/GetAll');
   Map<String, String> headers = {"Content-type": "application/json"};
   Map<String, dynamic> jsonBody = {
     "username": SessionManager.username,
@@ -139,7 +140,7 @@ Future<Map<DateTime, List<Evenement>>?> fetchEventsFromAPI(
         // Add the Evenement object to the list corresponding to the date
         eventsMap[date]!.add(evenement);
         sampleData.add(Appointment(
-          subject: evenement.nomCreneau,
+          subject: evenement.nomCreneau ?? "",
           startTime: evenement.from,
           endTime: evenement.to,
           color: const Color(0xFFD6D6D6),

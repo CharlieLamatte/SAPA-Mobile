@@ -13,7 +13,7 @@ use App\Entity\Users;
 
 class LoginController extends AbstractController
 {
-    #[Route('/login', name: 'app_login', methods: ['POST'])]
+    #[Route('/SAPA-Mobile/login', name: 'app_login', methods: ['POST'])]
     public function index(EntityManagerInterface $entityManager, Request $request)
     {
         $content = $request->getContent();
@@ -57,7 +57,7 @@ class LoginController extends AbstractController
 
     public function is_password_valid(Users $user, string $password): bool{
         return password_verify($password, $user->getPswd());
-    }    
+    }
 
     public function is_user_deactivated(Users $user): bool{
         if($user->isIsDeactivated() != null){

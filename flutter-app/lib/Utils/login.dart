@@ -7,9 +7,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class Login {
+  static String hostAdress = '127.0.0.1:8000';
+
   static loginUser(
       BuildContext context, String username, String password) async {
-    var url = Uri.parse('http://127.0.0.1:8000/login');
+    var url = Uri.parse('http://$hostAdress/SAPA-Mobile/login');
     Map<String, String> headers = {"Content-type": "application/json"};
     Map<String, String> jsonBody = {"username": username, "password": password};
     String requestBody = json.encode(jsonBody);

@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class AParticipeAController extends AbstractController
 {
-    #[Route('/EmargerSeance', name: 'set_emargement_seance')]
+    #[Route('/SAPA-Mobile/EmargerSeance', name: 'set_emargement_seance', methods: ['POST'])]
     public function setEmargementSeance(Request $request, EntityManagerInterface $entityManager) {
         $content = $request->getContent();
         $data = json_decode($content, true);

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_application_3/Screens/Module_ListeSeance/ListeSeance_Utils/evenement.dart';
+import 'package:flutter_application_3/Utils/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_application_3/Screens/Components/maNavDrawer.dart';
@@ -30,7 +31,8 @@ class _EmargementState extends State<Emargement> {
   }
 
   void fetchPatientsFromAPI() async {
-    var url = Uri.parse('http://127.0.0.1:8000/Participants/GetAll');
+    var url =
+        Uri.parse('http://${Login.hostAdress}/SAPA-Mobile/Participants/GetAll');
     Map<String, String> headers = {"Content-type": "application/json"};
     Map<String, dynamic> jsonBody = {
       "username": SessionManager.username,

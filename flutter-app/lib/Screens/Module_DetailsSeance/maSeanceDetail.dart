@@ -117,7 +117,7 @@ class _MaSeanceState extends State<MaSeance> {
                             // Créneau ///////////////////////////////////
                             MonChampDeSeance(
                               myLabel: "Créneau",
-                              myData: widget.seance.nomCreneau,
+                              myData: widget.seance.nomCreneau ?? "",
                             ),
 
                             const SizedBox(
@@ -128,7 +128,7 @@ class _MaSeanceState extends State<MaSeance> {
                             // Structure ///////////////////////////////////
                             MonChampDeSeance(
                               myLabel: "Structure",
-                              myData: widget.seance.nomStructure,
+                              myData: widget.seance.nomStructure ?? "",
                             ),
 
                             const SizedBox(
@@ -164,7 +164,7 @@ class _MaSeanceState extends State<MaSeance> {
                             // Parcours //////////////////////////////
                             MonChampDeSeance(
                               myLabel: "Parcours",
-                              myData: widget.seance.typeParcours,
+                              myData: widget.seance.typeParcours ?? "",
                             ),
 
                             const SizedBox(
@@ -175,7 +175,7 @@ class _MaSeanceState extends State<MaSeance> {
                             // Type //////////////////////////
                             MonChampDeSeance(
                               myLabel: "Type",
-                              myData: widget.seance.typeSeance,
+                              myData: widget.seance.typeSeance ?? "",
                             ),
 
                             const SizedBox(

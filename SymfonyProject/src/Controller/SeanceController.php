@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SeanceController extends AbstractController
 {
-    #[Route('/Seances/GetAll', name: 'app_seance')]
+    #[Route('/SAPA-Mobile/Seances/GetAll', name: 'app_seance', methods: ['POST'])]
     public function getAllSeances(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $content = $request->getContent();

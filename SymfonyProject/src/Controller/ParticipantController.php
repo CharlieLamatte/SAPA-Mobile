@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ParticipantController extends AbstractController
 {
-    #[Route('/Participants/GetAll', name: 'get_all_participants')]
+    #[Route('/SAPA-Mobile/Participants/GetAll', name: 'get_all_participants', methods: ['POST'])]
     public function getAllParticipants(EntityManagerInterface $entityManager, Request $request): JsonResponse
     {
         $content = $request->getContent();

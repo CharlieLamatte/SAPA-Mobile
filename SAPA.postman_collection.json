@@ -17,20 +17,7 @@
 					{
 						"key": "Content-Type",
 						"value": "application/json",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "username",
-						"value": "testIntervenantAbc@gmail.com",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "password",
-						"value": "testIntervenantAbc@1d",
-						"type": "text",
-						"disabled": true
+						"type": "text"
 					}
 				],
 				"body": {
@@ -43,7 +30,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/login",
+					"raw": "http://127.0.0.1:8000/SAPA-Mobile/login",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -53,6 +40,7 @@
 					],
 					"port": "8000",
 					"path": [
+						"SAPA-Mobile",
 						"login"
 					]
 				}
@@ -95,7 +83,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/Seances/GetAll",
+					"raw": "http://127.0.0.1:8000/SAPA-Mobile/Seances/GetAll",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -105,6 +93,7 @@
 					],
 					"port": "8000",
 					"path": [
+						"SAPA-Mobile",
 						"Seances",
 						"GetAll"
 					]
@@ -148,7 +137,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/Participants/GetAll",
+					"raw": "http://127.0.0.1:8000/SAPA-Mobile/Participants/GetAll",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -158,6 +147,7 @@
 					],
 					"port": "8000",
 					"path": [
+						"SAPA-Mobile",
 						"Participants",
 						"GetAll"
 					]
@@ -193,7 +183,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"testIntervenantAbc@gmail.com\",\r\n    \"password\" : \"testIntervenantAbc@1d\",\r\n    \"id_seance\": 3,\r\n    \"emargements\": [\r\n        {\r\n            \"id_patient\": 1,\r\n            \"present\": 0,\r\n            \"excuse\": 1,\r\n            \"commentaire\": \"Cramptés\"\r\n        },\r\n        {\r\n            \"id_patient\": 4,\r\n            \"present\": 0,\r\n            \"excuse\": 1,\r\n            \"commentaire\": \"apagnan\"\r\n        },\r\n        {\r\n            \"id_patient\": 5,\r\n            \"present\": 1,\r\n            \"excuse\": 0,\r\n            \"commentaire\": null\r\n        }\r\n    ]\r\n}",
+					"raw": "{\r\n    \"username\": \"testIntervenantAbc@gmail.com\",\r\n    \"password\" : \"testIntervenantAbc@1d\",\r\n    \"id_seance\": 3,\r\n    \"emargements\": [\r\n        {\r\n            \"id_patient\": 1,\r\n            \"present\": 0,\r\n            \"excuse\": 1,\r\n            \"commentaire\": \"Malade\"\r\n        },\r\n        {\r\n            \"id_patient\": 4,\r\n            \"present\": 0,\r\n            \"excuse\": 0,\r\n            \"commentaire\": null\r\n        },\r\n        {\r\n            \"id_patient\": 5,\r\n            \"present\": 1,\r\n            \"excuse\": 0,\r\n            \"commentaire\": null\r\n        }\r\n    ]\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -201,7 +191,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8000/EmargerSeance",
+					"raw": "http://127.0.0.1:8000/SAPA-Mobile/EmargerSeance",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -211,6 +201,7 @@
 					],
 					"port": "8000",
 					"path": [
+						"SAPA-Mobile",
 						"EmargerSeance"
 					]
 				}
